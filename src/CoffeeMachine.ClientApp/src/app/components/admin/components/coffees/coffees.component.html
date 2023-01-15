@@ -1,0 +1,125 @@
+<table class="table table-dark table-striped-columns table-hover align-middle">
+  <thead>
+    <tr>
+      <ng-template [ngTemplateOutlet]="loadHeadTemplate()"> </ng-template>
+    </tr>
+  </thead>
+  <tbody>
+    <tr #row *ngFor="let coffee of coffeeList | async; index as i">
+      <th scope="row">{{ i + 1 }}</th>
+      <ng-template
+        [ngTemplateOutlet]="loadTemplate(coffee)"
+        [ngTemplateOutletContext]="{ $implicit: coffee }"
+      >
+      </ng-template>
+    </tr>
+  </tbody>
+</table>
+
+<ng-template #readOnlyTableHeadTemplate>
+  <th scope="col" class="identifier-column">#</th>
+  <th scope="col">Наименование</th>
+  <th scope="col">Стоимость, руб.</th>
+  <th scope="col"></th>
+  <th scope="col" class="column-delete">
+    <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addCoffeeModal">
+      Добавить
+    </button>
+  </th>
+</ng-template>
+
+<div
+  class="modal fade"
+  id="addCoffeeModal"
+  tabindex="-1"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  aria-labelledby="addCoffeeModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addCoffeeModalLabel">Добавление кофе</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form [formGroup]="coffeeForm" (ngSubmit)="add()">
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="coffee-name" class="col-form-label">Наименование:</label>
+            <input id="coffee-name" type="text" class="form-control" formControlName="coffeeName" />
+            <p
+              *ngIf="
+                this.coffeeForm.get('coffeeName')?.invalid &&
+                this.coffeeForm.get('coffeeName')?.touched
+              "
+            >
+              <small class="text-danger">Введите корректное наименование.</small>
+            </p>
+          </div>
+          <div class="mb-3 ms-2">
+            <label for="coffee-price" class="col-form-label">Стоимость:</label>
+            <input
+              type="number"
+              class="form-control"
+              formControlName="coffeePrice"
+              id="coffee-price"
+            />
+            <p
+              *ngIf="
+                this.coffeeForm.get('coffeePrice')?.invalid &&
+                this.coffeeForm.get('coffeePrice')?.touched
+              "
+            >
+              <small class="text-danger">Введите корректную стоимость.</small>
+            </p>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+          <button
+            [disabled]="coffeeForm.invalid"
+            data-bs-dismiss="modal"
+            type="submit"
+            class="btn btn-primary"
+          >
+            Добавить
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<ng-template #editTableHeadTemplate>
+  <th scope="col" class="identifier-column">#</th>
+  <th scope="col">Идентификатор</th>
+  <th scope="col">Наименование</th>
+  <th scope="col">Стоимость, руб.</th>
+  <th scope="col"></th>
+  <th scope="col"></th>
+</ng-template>
+
+<ng-template #readOnlyTemplate let-coffee>
+  <td *ngIf="editedCoffee!.id !== ''"></td>
+  <td>{{ coffee.name }}</td>
+  <td>{{ coffee.price }}</td>
+  <td class="column-change">
+    <button class="btn btn-primary" (click)="editCoffee(coffee)">Изменить</button>
+  </td>
+  <td class="column-delete" >
+    <button class="btn btn-danger" (click)="delete(coffee.id)" *ngIf="editedCoffee!.id === ''">
+      Удалить
+    </button>
+  </td>
+</ng-template>
+
+<ng-template #editTemplate>
+  <td>
+    <input type="text" [(ngModel)]="editedCoffee!.id" readonly disabled class="form-control" />
+  </td>
+  <td><input type="text" [(ngModel)]="editedCoffee!.name" class="form-control" /></td>
+  <td><input type="number" [(ngModel)]="editedCoffee!.price" class="form-control" /></td>
+  <td class="column-change"><button class="btn btn-success" (click)="save(editedCoffee!)">Сохранить</button></td>
+  <td class="column-delete"><button class="btn btn-warning" (click)="cancel()">Отменить</button></td>
+</ng-template>

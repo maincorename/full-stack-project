@@ -1,0 +1,6 @@
+{
+    "requestPathCoffee": "https://localhost:7150/api/Coffees",
+    "requestPathPurchase": "https://localhost:7150/api/Purchases",
+    "requestPathStatistic": "https://localhost:7150/api/Statistics",
+    "requestPathUser": "https://localhost:7150/api/User"
+}

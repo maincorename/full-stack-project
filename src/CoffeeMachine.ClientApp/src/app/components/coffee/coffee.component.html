@@ -1,0 +1,59 @@
+<app-header #appHeader></app-header>
+<div class="container mt-5">
+  <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 gx-2 gy-2">
+    <div class="col" *ngFor="let coffee of coffees | async">
+      <div class="card shadow text-center">
+        <img
+          src="https://i.pinimg.com/originals/d8/84/ab/d884ab5ceb55e57396e09458c09c4a53.png"
+          class="card-img-top w-50 m-auto"
+          alt="{{ coffee.name }}"
+        />
+        <div class="card-body">
+          <h5 class="card-title">{{ coffee.name | titlecase }}</h5>
+          <p class="card-text">{{ coffee.price | currency : 'RUB' : 'symbol-narrow' }}</p>
+          <a
+            (click)="onSelect(coffee)"
+            data-bs-toggle="modal"
+            data-bs-target="#buyCoffeeModal"
+            class="btn"
+            >Купить {{ coffee.name }}</a
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #errorTemplate>
+  <p>{{ this.errorMessage }}</p>
+</ng-template>
+
+<ng-template #buyCoffeeTemplate>
+  <p>Купленный кофе: {{ this.purchase.purchasedCoffee.name }}</p>
+  <p>Ваша сдача: {{ this.purchase.changeBanknotes }}</p>
+</ng-template>
+
+<div
+  class="modal fade"
+  id="buyCoffeeModal"
+  tabindex="-1"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  aria-labelledby="buyCoffeeModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="buyCoffeeModalLabel">Покупка кофе</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <ng-template [ngTemplateOutlet]="loadTemplate()"></ng-template>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+      </div>
+    </div>
+  </div>
+</div>

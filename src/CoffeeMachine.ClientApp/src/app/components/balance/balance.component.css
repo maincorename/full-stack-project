@@ -1,0 +1,12 @@
+.color {
+    color: #ADCCCF;
+    background-color: #789992;
+}
+
+input.btn:hover{
+    box-shadow: 0 0 0 0.1rem #789992 !important;
+}
+
+.form-control:focus{
+    box-shadow: 0 0 0 0.1rem #789992 !important;
+}

@@ -1,0 +1,24 @@
+<div class="row justify-content-end">
+  <div class="col-6 col-md-5 col-lg-3 col-xxl-2">
+    <span class="align-middle"
+      >Ваш текущий баланс:
+      <h5>{{ money | currency : 'RUB' : 'symbol-narrow' }}</h5>
+    </span>
+  </div>
+  <div class="col-6 col-md-5 col-lg-3 col-xxl-2">
+    <div class="mt-2">
+      <form ngNativeValidate class="input-group" (submit)="onEnter($event, box.valueAsNumber)">
+        <input
+          type="number"
+          class="form-control p-2"
+          pattern="\d [0-9]"
+          #box
+          min="500"
+          step="500"
+          max="5000"
+        />
+        <input type="submit" class="btn color" value="Внести" />
+      </form>
+    </div>
+  </div>
+</div>
